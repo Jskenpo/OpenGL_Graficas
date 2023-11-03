@@ -52,24 +52,44 @@ class Model(object):
         glBufferData(GL_ARRAY_BUFFER, self.vertbuffer.nbytes, self.vertbuffer, GL_STATIC_DRAW)
 
         # positions
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * 8, ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
-        # colors
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(12))
+       
+        # UVs
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * 8, ctypes.c_void_p(4 * 3))
         glEnableVertexAttribArray(1)
 
-        # UVs
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(24))
+        # normals
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 4 * 8, ctypes.c_void_p(4 * 5))
         glEnableVertexAttribArray(2)
+        
+        # texture
 
+        glActiveTexture(GL_TEXTURE0)
+        glBindTexture(GL_TEXTURE_2D, self.texture)
+        glTexImage2D(GL_TEXTURE_2D, 
+                        0, 
+                        GL_RGB, 
+                        self.textureSurface.get_width(), 
+                        self.textureSurface.get_height(), 
+                        0, 
+                        GL_RGB, 
+                        GL_UNSIGNED_BYTE, 
+                        self.textureData)
+
+        glGenerateTextureMipmap(self.texture)
+
+        glDrawArrays(GL_TRIANGLES, 0, int(len(self.vertbuffer) / 8))
+
+        '''
         if hasattr(self, 'texture'):
             glBindTexture(GL_TEXTURE_2D, self.texture)
             glDrawArrays(GL_TRIANGLES, 0, int(len(self.vertbuffer) / 8))
             glBindTexture(GL_TEXTURE_2D, 0)
         else:
             glDrawArrays(GL_TRIANGLES, 0, int(len(self.vertbuffer) / 8))
-
+        '''
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)
         glDisableVertexAttribArray(2)

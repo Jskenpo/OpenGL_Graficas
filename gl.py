@@ -19,6 +19,8 @@ class Renderer(object):
 
         self.activeShader = None
 
+        self.dirLight = glm.vec3(1,0,0)
+
         #vista
         self.camPosition = glm.vec3(0,0,0)
         self.camRotation = glm.vec3(0,0,0)
@@ -65,6 +67,10 @@ class Renderer(object):
                                1,
                                GL_FALSE,
                                glm.value_ptr(self.projectionMatrix))
+
+            glUniform3fv(glGetUniformLocation(self.activeShader, 'dirLight'),
+                         1,
+                         glm.value_ptr(self.dirLight))
 
             
 
