@@ -1,42 +1,37 @@
-# En OpenGl los shaders se escriben en un nuevo lenguaje de programacion llamado GLSL
-# (OpenGL Shading Language). Los shaders son programas que corren en la GPU y son
-# los encargados de procesar los vertices y los px de la escena. Los shaders
-
-vertex_shader = '''
-#version 450 core 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec2 textCoords;
-layout (location = 2) in vec3 normals;
-
-uniform mat4 modelMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 projectionMatrix;
 
 
-out vec2 Uvs;
-
-void main(){
-
-
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+vertex_shader = """
+    #version 450 core
+    layout (location = 0) in vec3 position;
+    layout (location = 1) in vec2 texCoords;
+    layout (location = 2) in vec3 normals;
     
-    Uvs = textCoords;
-}
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projectionMatrix;
+    
+    out vec2 UVs;
+    out vec3 normal;
+    
+    void main() {
+        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+        UVs = texCoords;
+        normal = (modelMatrix * vec4(normals, 0.0)).xyz;
+    }
+"""
 
-'''
+fragment_shader = """
+    #version 450 core
+    
+    layout (binding = 0) uniform sampler2D tex;
+    
+    in vec2 UVs;
+    in vec3 normal;
+    out vec4 fragColor;
+    
+    void main() {
+        fragColor = texture(tex, UVs);
+    }
+"""
 
-fragment_shader = '''
-#version 450 core
-in vec2 Uvs;
 
-uniform sampler2D basicTexture;
-
-out vec4 FragColor;
-
-void main(){
-    FragColor = texture(basicTexture, Uvs);
-}
-
-
-
-'''
