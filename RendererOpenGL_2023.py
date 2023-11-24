@@ -37,6 +37,8 @@ model.position.y = -2
 model.scale = glm.vec3(0.7 , 0.7, 0.7)
 gl.lightIntensity = 5.5
 gl.dirLight = glm.vec3(0.0, -1.0, -1.0)
+gl.scene.append(model)
+gl.target = model.position
 
 #modelo 2
 obj = Obj("objs/torre.obj")
@@ -74,8 +76,16 @@ gl.lightIntensity = 5.5
 gl.dirLight = glm.vec3(0.0, -1.0, -1.0)
 
 
+song = pygame.mixer.Sound("ocaso.mp3")
+song.play(loops=-1)
 
-#hacer que el target sea el modelo
+#establecer limite de movimiento de camara 
+limitpy = 3.0
+limitny = -3.0
+limitpx = 3.0
+limitnx = -3.0
+limitpz = 10.0
+limitnz = -10.0
 
 
 isRunning = True
@@ -87,13 +97,18 @@ while isRunning:
 
     #mover camara con flechas y que el centro sea el modelo
     if keys[pygame.K_LEFT]:
-        gl.cameraPosition.x -= 5 * deltaTime
+        #parar hasta llegar al limite 
+        if gl.cameraPosition.x >= limitnx:
+            gl.cameraPosition.x -= 2 * deltaTime
     if keys[pygame.K_RIGHT]:
-        gl.cameraPosition.x += 5 * deltaTime
+        if gl.cameraPosition.x <= limitpx:
+            gl.cameraPosition.x += 2 * deltaTime
     if keys[pygame.K_UP]:
-        gl.cameraPosition.y += 5 * deltaTime
+        if gl.cameraPosition.y <= limitpy:
+            gl.cameraPosition.y += 2 * deltaTime
     if keys[pygame.K_DOWN]:
-        gl.cameraPosition.y -= 5 * deltaTime
+        if gl.cameraPosition.y >= limitny:
+            gl.cameraPosition.y -= 2 * deltaTime
 
 
 
@@ -106,9 +121,11 @@ while isRunning:
 
     #hacer zoom 
     if keys[pygame.K_w]:
-        gl.cameraPosition.z += 5 * deltaTime
+        if gl.cameraPosition.z <= limitpz:
+            gl.cameraPosition.z += 5 * deltaTime
     if keys[pygame.K_s]:
-        gl.cameraPosition.z -= 5 * deltaTime
+        if gl.cameraPosition.z >= limitnz:
+            gl.cameraPosition.z -= 5 * deltaTime
 
     
     #cargar diferentes modelos segun tecla
@@ -151,5 +168,5 @@ while isRunning:
     gl.Update()
     gl.render()
     pygame.display.flip()
-
+pygame.mixer.quit()
 pygame.quit() 
