@@ -24,22 +24,58 @@ gl.setShader(vertex_shader, fragment_shader)
 
 gl.createSkybox(skyboxTextures, skyboxVertexShader, skyboxFragmentShader)
 
+
+
+
+#modelo 1 
 obj = Obj("objs/golem.obj")
 objData = obj.objData
-
-
-
 model = Model(objData)
 model.loadTexture("textures/golem.jpeg")
 model.position.z = -6
 model.position.y = -2
 model.scale = glm.vec3(0.7 , 0.7, 0.7)
-gl.scene.append(model)
 gl.lightIntensity = 5.5
 gl.dirLight = glm.vec3(0.0, -1.0, -1.0)
 
+#modelo 2
+obj = Obj("objs/torre.obj")
+objData = obj.objData
+model2 = Model(objData)
+model2.loadTexture("textures/torre.bmp")
+model2.position.z = -6
+model2.position.y = -2
+model2.scale = glm.vec3(0.7 , 0.7, 0.7)
+gl.lightIntensity = 5.5
+gl.dirLight = glm.vec3(0.0, -1.0, -1.0)
+
+
+#modelo 3
+obj = Obj("objs/dragon.obj")
+objData = obj.objData
+model3 = Model(objData)
+model3.loadTexture("textures/dragon.png")
+model3.position.z = -6
+model3.position.y = -2
+model3.scale = glm.vec3(0.7 , 0.7, 0.7)
+gl.lightIntensity = 5.5
+gl.dirLight = glm.vec3(0.0, -1.0, -1.0)
+
+
+#modelo 4
+obj = Obj("objs/demon.obj")
+objData = obj.objData
+model4 = Model(objData)
+model4.loadTexture("textures/demon.png")
+model4.position.z = -6
+model4.position.y = -2
+model4.scale = glm.vec3(0.7 , 0.7, 0.7)
+gl.lightIntensity = 5.5
+gl.dirLight = glm.vec3(0.0, -1.0, -1.0)
+
+
+
 #hacer que el target sea el modelo
-gl.target = model.position
 
 
 isRunning = True
@@ -73,6 +109,26 @@ while isRunning:
         gl.cameraPosition.z += 5 * deltaTime
     if keys[pygame.K_s]:
         gl.cameraPosition.z -= 5 * deltaTime
+
+    
+    #cargar diferentes modelos segun tecla
+    if keys[pygame.K_0]:
+        gl.scene.clear()
+        gl.scene.append(model)
+        gl.target = model.position
+    if keys[pygame.K_9]:
+        gl.scene.clear()
+        gl.scene.append(model2)
+        gl.target = model2.position
+    if keys[pygame.K_8]:
+        gl.scene.clear()
+        gl.scene.append(model3)
+        gl.target = model3.position
+    if keys[pygame.K_7]:
+        gl.scene.clear()
+        gl.scene.append(model4)
+        gl.target = model4.position
+
 
 
     for event in pygame.event.get():
